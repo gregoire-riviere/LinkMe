@@ -26,3 +26,5 @@ data/
 
 node_modules/
 *.log
+test/
+.DS_Store

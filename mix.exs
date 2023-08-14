@@ -14,6 +14,7 @@ defmodule LinkMe.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {LinkMe, []},
       extra_applications: [:logger, :plug_cowboy, :inets, :logger_file_backend, :tzdata]
     ]
   end

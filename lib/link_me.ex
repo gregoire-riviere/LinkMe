@@ -1,18 +1,17 @@
 defmodule LinkMe do
-  @moduledoc """
-  Documentation for `LinkMe`.
-  """
+  def start(_type, _args) do
 
-  @doc """
-  Hello world.
+    plug_child = 
+      {Plug.Cowboy, 
+      scheme: :http, 
+      plug: AppRouter, 
+      options: [port: 8443]}
 
-  ## Examples
-
-      iex> LinkMe.hello()
-      :world
-
-  """
-  def hello do
-    :world
+    children = [
+      plug_child,
+      {LinkServer, []}
+    ]
+    IO.inspect(children)
+    {:ok, _pid} = Supervisor.start_link(children, strategy: :one_for_one, name: __MODULE__)
   end
 end
