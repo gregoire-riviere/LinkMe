@@ -2,7 +2,7 @@ defmodule Token do
     
     def base_path(), do: if System.get_env("DEPLOYED") == "TRUE", do: "/opt/link_me/", else: "data/"
 
-    def secret(), do: if System.get_env("DEPLOYED") == "TRUE", do: File.read!("#{base_path()}/link_server"), else: File.read!("#{base_path()}/link_server")
+    def secret(), do: if System.get_env("DEPLOYED") == "TRUE", do: File.read!("#{base_path()}/secret"), else: File.read!("#{base_path()}/secret")
     def generate_secret(), do: File.write!("#{base_path()}/secret", :crypto.strong_rand_bytes(60) |> Base.encode64)
 
     # duration will be in days
