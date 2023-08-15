@@ -3,7 +3,7 @@ defmodule LinkServer do
     use GenServer
     require Logger
 
-    @file_path "data/link_server"
+    def file_path(), do: if System.get_env("DEPLOYED") == "TRUE", do: "/opt/link_me", else: "data/link_server"
     @garbage_freq 600 * 1000
 
     def base_url(), do: "https://sceptical-forex.com:9000/"
@@ -14,11 +14,11 @@ defmodule LinkServer do
 
     def init(_) do
         Logger.info("Starting #{__MODULE__}")
-        links = case File.read(@file_path) do
+        links = case File.read(file_path()) do
             {:ok, l} -> 
                 :erlang.binary_to_term(l)
             _ -> 
-                File.write!(@file_path, %{} |> :erlang.term_to_binary())
+                File.write!(file_path(), %{} |> :erlang.term_to_binary())
                 %{}
         end
         Process.send_after(self(), :garbage_collect, @garbage_freq)
@@ -42,13 +42,13 @@ defmodule LinkServer do
             "path" => path,
             "expiration" => expiration
         })
-        File.write!(@file_path, links |> :erlang.term_to_binary())
+        File.write!(file_path(), links |> :erlang.term_to_binary())
         {:reply, "#{base_url()}/#{token |> URI.encode_www_form()}", links}
     end
 
     def handle_call({:delete_link, token}, _from, links) do
         links = links |> Map.pop(token) |> elem(1)
-        File.write!(@file_path, links |> :erlang.term_to_binary())
+        File.write!(file_path(), links |> :erlang.term_to_binary())
         {:reply, :ok, links}
     end
 
