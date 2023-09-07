@@ -26,7 +26,7 @@ defmodule LinkServer do
     end
 
     def handle_info(:garbage_collect, links) do
-        links = links |> Enum.reject(& &1.expiration < :os.system_time(:seconds))
+        links = links |> Enum.reject(fn {k,v} -> v["expiration"] < :os.system_time(:seconds) end) |> Enum.into(%{})
         Process.send_after(self(), :garbage_collect, @garbage_freq)
         {:noreply, links}
     end
