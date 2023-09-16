@@ -5,6 +5,9 @@ defmodule LinkMe do
       {Plug.Cowboy, 
       scheme: :http, 
       plug: AppRouter, 
+      protocol_options: [
+        idle_timeout: :infinity
+      ],
       options: [port: 8443]}
 
     children = [
