@@ -6,7 +6,7 @@ defmodule LinkServer do
     def file_path(), do: if System.get_env("DEPLOYED") == "TRUE", do: "/opt/link_me", else: "data/link_server"
     @garbage_freq 600 * 1000
 
-    def base_url(), do: "https://sceptical-forex.com:9000/"
+    def base_url(), do: "https://torrent.sceptical-forex.com:9000/"
 
     def start_link(_) do
         GenServer.start_link(__MODULE__, nil, name: __MODULE__)
@@ -26,11 +26,12 @@ defmodule LinkServer do
     end
 
     def handle_info(:garbage_collect, links) do
-        links = links |> Enum.reject(fn {k,v} -> v["expiration"] < :os.system_time(:seconds) end) |> Enum.into(%{})
+        links = links |> Enum.reject(fn {_,v} -> v["expiration"] < :os.system_time(:seconds) end) |> Enum.into(%{})
         Process.send_after(self(), :garbage_collect, @garbage_freq)
         {:noreply, links}
     end
 
+    def get_all_links(), do: GenServer.call(LinkServer, :get_all_links)
     def new_link(path, duration \\ 30), do: GenServer.call(LinkServer, {:new_link, path, duration})
     def delete_link(token), do: GenServer.call(LinkServer, {:delete_link, token})
     def verify_token(token), do: GenServer.call(LinkServer, {:verify_token, token})
@@ -40,7 +41,8 @@ defmodule LinkServer do
         expiration =  :os.system_time(:seconds) + duration * 24*3600
         links = links |> Map.put(token, %{
             "path" => path,
-            "expiration" => expiration
+            "expiration" => expiration,
+            "link" => "#{base_url()}#{token |> URI.encode_www_form()}"
         })
         File.write!(file_path(), links |> :erlang.term_to_binary())
         {:reply, "#{base_url()}/#{token |> URI.encode_www_form()}", links}
@@ -50,6 +52,10 @@ defmodule LinkServer do
         links = links |> Map.pop(token) |> elem(1)
         File.write!(file_path(), links |> :erlang.term_to_binary())
         {:reply, :ok, links}
+    end
+
+    def handle_call(:get_all_links, _from, links) do
+        {:reply, links, links}
     end
 
     def handle_call({:verify_token, token}, _from, links) do
