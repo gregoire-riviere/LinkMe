@@ -1,0 +1,27 @@
+@font-face {
+    font-family: MyFont;
+    src: url(/font/Codec-Cold-Regular-trial.ttf);
+  }
+
+body {
+    margin: 0;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.link_line{
+    padding-top: 5px;
+}
+
+.links-container{
+    margin: 10px;
+}
+
+#link_buttons {
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #1F1300;
+}
+
+.copy-button {
+    margin-left: 10px;
+}

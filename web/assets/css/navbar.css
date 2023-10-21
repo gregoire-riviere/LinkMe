@@ -1,0 +1,17 @@
+#navbar {
+    width: 100%;
+    background-color:#CC5803;
+    display: flex;
+    justify-content:flex-start;
+    align-items: center;
+    padding-left: 10px;
+}
+
+#navbar-title {
+    height: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: xx-large;
+    color: white;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
