@@ -4,18 +4,17 @@
     <link rel="stylesheet" href="css/home.css"/>
     <link rel="stylesheet" href="css/navbar.css"/>
     <template src="general_meta.html"/>
-    <script src="js/links.js"></script>
     <title>Link Me</title>
   </head>
   <body>
     <template src="navbar.html"/>
     <div class="container-fluid links-container">
-      <div class="row">
-        <div class="card link-card col-sm-6 d-none">
+      <div class="row template-to-delete d-none">
+        <div class="card link-card col-sm-6">
           <div class="card-body">
             <h5 class="card-title">Batman</h5>
             <div class="d-flex flex-column">
-              <div class="p-2"><strong>Emplacement :</strong> <span class="file"></span>/toto/Batman</span></div>
+              <div class="p-2"><strong>Emplacement :</strong> <span class="file">/toto/Batman</span></div>
               <div class="p-2"><strong>Link :</strong> <span class="url">https:/toto.com/titi</span><i class="fa fa-files-o copy-button"></i></div>
               <div class="p-2"><strong>Expiration :</strong> <span class="expiration">10/12/2023 00:12</span></div>
             </div>
@@ -24,5 +23,6 @@
         </div>        
       </div>
   </div>
+  <script src="js/links.js"></script>
   </body>
 </html>
